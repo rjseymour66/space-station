@@ -3,9 +3,27 @@
 /* -------------------- */
 
 :root {
+    /* colors */
     --clr-dark: 230 35% 7%;
     --clr-light: 231 77% 90%;
     --clr-white: 0 0% 100%;
+
+    /* font-sizes */
+    /* use rem bc px can overwrite custom user settings that require for */
+    /* usablity 400 is the 'base' size. Working from base 16. */
+    --fs-900: 9.375rem;
+    --fs-800: 6.25rem;
+    --fs-700: 3.5rem;
+    --fs-600: 2rem;
+    --fs-500: 1.75rem;
+    --fs-400: 1.125rem;
+    --fs-300: 1rem;
+    --fs-200: 0.875rem;
+
+    /* font-families */
+    --ff-serif: 'Bellefair', serif;
+    --ff-sans-cond: 'Barlow Condensed', sans-serif;
+    --ff-sans-normal: 'Barlow', sans-serif;
 }
 
 
@@ -35,8 +53,22 @@ picture {
     margin: 0;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    font-weight: 400;
+}
+
 /* set up the body */
 body {
+    font-family: var(--ff-sans-normal);
+    font-size: var(--fs-400);
+    color: hsl(var(--clr-white));
+    background-color: hsl(var(--clr-dark));
     line-height: 1.5;  /* browser default is 1.4 */
     min-height: 100vh; /* prevents strange short pages */
 }
@@ -73,6 +105,7 @@ select {
 /* Utility Classes      */
 /* -------------------- */
 
+/* gap is custom prop you can set on each flex/grid container */
 .flex {
     display: flex;
     gap: var(--gap, 1rem);
@@ -81,6 +114,14 @@ select {
 .grid {
     display: grid;
     gap: var(--gap, 1rem);
+}
+
+/* Andy Bell created .flow */
+/* Select everything that has a sibling before it and add styles. 'where' for specificity issues.
+   * + * == *where(:not(:first-child))*/
+/* --flow-space lets you set the margin-top differently on specific els */
+.flow > *:where(:not(:first-child)) {
+    margin-top: var(--flow-space, 1rem);
 }
 
 .container {
@@ -114,6 +155,171 @@ select {
 .text-accent { color: hsl( var(--clr-light) );}
 .text-white  { color: hsl( var(--clr-white) );}
 
-.example-component {
-    background-color: hsl( var(--clr-light) / .2 );
+/* Typography */
+
+.ff-serif { font-family: var(--ff-serif); }
+.ff-sans-cond { font-family: var(--ff-sans-cond); }
+.ff-sans-normal { font-family: var(--ff-sans-normal); }
+
+/* you can use px for small and specific things every now and then */
+.letter-spacing-1 { letter-spacing: 4.75px; }
+.letter-spacing-2 { letter-spacing: 2.7px; }
+.letter-spacing-3 { letter-spacing: 2.35px; }
+
+.uppercase { text-transform: uppercase; }
+
+.fs-900 { font-size: var(--fs-900); }
+.fs-800 { font-size: var(--fs-800); }
+.fs-700 { font-size: var(--fs-700); }
+.fs-600 { font-size: var(--fs-600); }
+.fs-500 { font-size: var(--fs-500); }
+.fs-400 { font-size: var(--fs-400); }
+.fs-300 { font-size: var(--fs-300); }
+.fs-200 { font-size: var(--fs-200); }
+
+.fs-900,
+.fs-800,
+.fs-700,
+.fs-600 {
+    line-height: 1.1;
+}
+
+.numbered-title {
+    font-family: var(--ff-sans-cond);
+    font-size: var(--fs-500);
+    text-transform: uppercase;
+    letter-spacing: 4.72px;
+    color: hsl( var(--clr-white));
+}
+
+.numbered-title span {
+    margin-right: .5em;
+    font-weight: 700;
+    color: hsl( var(--clr-white) / .25);
+}
+
+
+/* -------------------- */
+/* Components           */
+/* -------------------- */
+
+.large-button {
+    /* makes this the containing block for ::after el */
+    position: relative;
+    display: grid;
+    z-index: 1;
+    place-items: center;
+    padding: 0 2em;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    text-decoration: none;
+}
+
+.large-button::after {
+    /* pseudo-el must have content prop */
+    content: '';
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background: hsl( var(--clr-white) / .15);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 500ms linear, transform 750ms ease-in-out;
+}
+
+.large-button:hover::after,
+.large-button:focus::after {
+    opacity: 1;
+    transform: scale(1.5);
+}
+
+.primary-navigation {
+    --gap: 8rem;
+    --underline-gap: 2rem;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+}
+
+.primary-navigation a {
+    text-decoration: none;
+}
+
+.primary-navigation a > span {
+    font-weight: 700;
+    margin-right: .5em;
+}
+
+/* select every descendant of this class */
+.underline-indicators > * {
+    cursor: pointer;
+    padding: var(--underline-gap, 1rem) 0;
+    border: 0;
+    border-bottom: .2rem solid hsl( var( --clr-white) / 0);
+}
+
+.underline-indicators > *:hover,
+.underline-indicators > *:focus {
+    border-color: hsl( var(--clr-white) / .5);
+}
+
+/* aria-selected means that its always in this state */
+.underline-indicators > .active,
+.underline-indicators > [aria-selected="true"] {
+    color: hsl( var(--clr-white) / 1);
+    border-color: hsl( var(--clr-white) / 1);
+}
+
+.tab-list {
+    --gap: 2.5rem;
+}
+
+.dot-indicators > * {
+    cursor: pointer;
+    border: 0;
+    border-radius: 50%;
+    padding: .5em;
+    background-color: hsl( var(--clr-white) / .25);
+}
+
+.dot-indicators > *:hover,
+.dot-indicators > *:focus {
+    background-color: hsl( var(--clr-white) / .5);
+}
+
+.dot-indicators > [aria-selected="true"] {
+    background-color: hsl( var(--clr-white));
+}
+
+.lg-dot-indicators > * {
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    margin-top: 1em;
+    aspect-ratio: 1;
+    width: 40%;
+    height: 40%;
+    border-radius: 50%;
+    font-family: var(--ff-serif);
+    font-size: var(--fs-600);
+    background-color: hsl( var(--clr-dark));
+    color: hsl( var(--clr-white));;
+    border: 1px solid hsl( var(--clr-light) / .25);
+}
+
+.lg-dot-indicators > *:hover {
+    background-color: hsl( var(--clr-dark));
+}
+
+.lg-dot-indicators > *:hover,
+.lg-dot-indicators > *:focus {
+    background-color: hsl( var(--clr-dark));
+    border: 1px solid hsl( var(--clr-light));
+}
+
+.lg-dot-indicators > [aria-selected="true"] {
+    background-color: hsl( var(--clr-white));
+    color: hsl( var(--clr-dark))
 }
