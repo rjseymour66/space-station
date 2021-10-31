@@ -11,12 +11,13 @@
     /* font-sizes */
     /* use rem bc px can overwrite custom user settings that require for */
     /* usablity 400 is the 'base' size. Working from base 16. */
-    --fs-900: 9.375rem;
-    --fs-800: 6.25rem;
-    --fs-700: 3.5rem;
-    --fs-600: 2rem;
+    /* clamp details: https://css-tricks.com/linearly-scale-font-size-with-css-clamp-based-on-the-viewport/ */
+    --fs-900: clamp(5rem, 8vw + 1rem, 9.375rem);
+    --fs-800: 3.5rem;
+    --fs-700: 1.5rem;
+    --fs-600: 1rem;
     --fs-500: 1.75rem;
-    --fs-400: 1.125rem;
+    --fs-400: 0.9375rem;
     --fs-300: 1rem;
     --fs-200: 0.875rem;
 
@@ -24,6 +25,29 @@
     --ff-serif: 'Bellefair', serif;
     --ff-sans-cond: 'Barlow Condensed', sans-serif;
     --ff-sans-normal: 'Barlow', sans-serif;
+}
+
+@media (min-width: 35em) {
+    :root {
+        --fs-800: 5rem;
+        --fs-700: 2.5rem;
+        --fs-600: 1.5rem;
+        --fs-400: 1rem;
+    }
+}
+
+/* use em on media queries bc Safari zoom issues */
+@media (min-width: 45em) {
+    :root {
+        /* font-sizes */
+        --fs-800: 6.25rem;
+        --fs-700: 3.5rem;
+        --fs-600: 2rem;
+        --fs-500: 1.75rem;
+        --fs-400: 1.125rem;
+        --fs-300: 1rem;
+        --fs-200: 0.875rem;
+    }
 }
 
 
@@ -71,6 +95,9 @@ body {
     background-color: hsl(var(--clr-dark));
     line-height: 1.5;  /* browser default is 1.4 */
     min-height: 100vh; /* prevents strange short pages */
+    
+    display: grid;
+    grid-template-rows: min-content 1fr;
 }
 
 /* make images easier to work with */
@@ -116,6 +143,10 @@ select {
     gap: var(--gap, 1rem);
 }
 
+.d-block {
+    display: block;
+}
+
 /* Andy Bell created .flow */
 /* Select everything that has a sibling before it and add styles. 'where' for specificity issues.
    * + * == *where(:not(:first-child))*/
@@ -131,6 +162,44 @@ select {
     /* margin-inline: auto; */
     /* padding-inline: 2em (l/r not t/b) */
 }
+
+.grid-container {
+    text-align: center;
+    display: grid;
+    place-items: center;
+    padding: 0 1rem;
+}
+
+.grid-container * {
+    max-width: 50ch;
+}
+
+@media (min-width: 45em) {
+    .grid-container {
+        text-align: left;
+        column-gap: var(--container-gap, 2rem);
+        /* 2rem -> as much space as you need | 0-40rem | 0-40rem | 2rem -> as much space as you need */
+        grid-template-columns: minmax(2rem, 1fr) repeat(2, minmax(0, 40rem)) minmax(2rem, 1fr);
+    }
+
+    /* browser creates grid cols even though they are not currently defined */
+    .grid-container > *:first-child {
+        grid-column: 2;
+    }
+
+    .grid-container > *:last-child {
+        grid-column: 3;
+    }
+
+    .grid-container--home {
+        /* places the items on the bottom. max picks the greater of the two vals.
+           After the padding-bottom is equal to one of these sizes, it stops sticking 
+           the item to the bottom and allows the space to grow */
+        padding-bottom: max(6rem, 20vh);
+        align-items: end;
+    }
+}
+
 
 /* screen reader only. Still in DOM, just hidden */
 .sr-only {
@@ -204,10 +273,16 @@ select {
 /* -------------------- */
 
 .large-button {
+    /* Don't usually set this font-size but it has to be the same
+       across all devices */
+    font-size: 2rem;
     /* makes this the containing block for ::after el */
     position: relative;
-    display: grid;
     z-index: 1;
+    /* when you use just grid, inner display value is grid, 
+       outer display value is block. block els grow to fit the 
+       page.  */
+    display: inline-grid;
     place-items: center;
     padding: 0 2em;
     border-radius: 50%;
@@ -309,17 +384,31 @@ select {
     border: 1px solid hsl( var(--clr-light) / .25);
 }
 
-.lg-dot-indicators > *:hover {
-    background-color: hsl( var(--clr-dark));
+/* --------------------------- */
+/* Page-specific background    */
+/* --------------------------- */
+
+/* background-position: https://css-tricks.com/almanac/properties/b/background-position/ */
+body {
+    background-size: cover;
+    background-position: bottom center;
 }
 
-.lg-dot-indicators > *:hover,
-.lg-dot-indicators > *:focus {
-    background-color: hsl( var(--clr-dark));
-    border: 1px solid hsl( var(--clr-light));
+/* home */
+
+.home {
+    background-image: url(./assets/home/background-home-mobile.jpg);
 }
 
-.lg-dot-indicators > [aria-selected="true"] {
-    background-color: hsl( var(--clr-white));
-    color: hsl( var(--clr-dark))
+@media (min-width: 35em) {
+    .home {
+        background-position: center center;
+        background-image: url(./assets/home/background-home-tablet.jpg);
+    }
+}
+
+@media (min-width: 45em) {
+    .home {
+        background-image: url(./assets/home/background-home-desktop.jpg);
+    }
 }
