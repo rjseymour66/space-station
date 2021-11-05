@@ -98,6 +98,9 @@ body {
     
     display: grid;
     grid-template-rows: min-content 1fr;
+
+    /*  */
+    overflow-x: hidden;
 }
 
 /* make images easier to work with */
@@ -138,6 +141,7 @@ select {
     gap: var(--gap, 1rem);
 }
 
+/* https://css-tricks.com/snippets/css/complete-guide-grid/ */
 .grid {
     display: grid;
     gap: var(--gap, 1rem);
@@ -212,6 +216,23 @@ select {
     clip: rect(0,0,0,0);
     white-space: nowrap;
     border: 0;
+}
+
+.skip-to-content {
+    /* absolute pulls it out of the flow so it doesn't interfere with other elements */
+    position: absolute;
+    z-index: 9999;
+    background: hsl(var( --clr-white));
+    color: hsl(var( --clr-dark));
+    padding: .5em 1em;
+    margin-inline: auto;
+    /* hides this from the screen */
+    transform: translateY(-100%);
+}
+
+.skip-to-content:focus {
+    transform: translateY(0);
+    transition: transform 250ms ease-in-out;
 }
 
 /* Colors */
@@ -309,13 +330,33 @@ select {
     transform: scale(1.5);
 }
 
+/* primary-header */
+
+.logo {
+    /* how far the logo is from top and bottom. clamp(min, middle, max) 
+       viewport units don't zoom */
+    margin: 1.5rem clamp(1.5rem, 5vw, 3.5rem);
+}
+
+.primary-header {
+    justify-content: space-between;
+    align-items: center;
+}
+
 .primary-navigation {
-    --gap: 8rem;
+    --gap: clamp(1.5rem, 5vw, 3.5rem);
     --underline-gap: 2rem;
-    list-style-type: none;
+    list-style: none;
     padding: 0;
     margin: 0;
+    background: hsl( var(--clr-dark) / .8);
+}
 
+@supports (backdrop-filter: blur(1.5rem)) {
+    .primary-navigation {
+        background: hsl( var(--clr-white) / .05);
+        backdrop-filter: blur(1.5rem);
+    }
 }
 
 .primary-navigation a {
@@ -325,6 +366,103 @@ select {
 .primary-navigation a > span {
     font-weight: 700;
     margin-right: .5em;
+}
+
+.mobile-nav-toggle {
+    /* removes from the DOM */
+    display: none;
+}
+
+/* Mobile navigation styles.
+   Use max-width because both mobile and higher use many of the same properties
+   and we don't want to overwrite them for the larger screen size. */
+@media (max-width: 35em) {
+    .primary-navigation {
+        --underline-gap: .5rem;
+        position: fixed;
+        z-index: 1000;
+        /* inset is shorthand for top/bottom/left/right. This is what positions 
+        the nav to the right */
+        inset: 0 0 0 30%;
+        list-style-type: none;
+        /* min chooses the smaller of the two vals */
+        padding: min(20rem, 15vh) 2rem;
+        margin: 0;
+        flex-direction: column;
+        /* this moves 100% of the element off to the side */
+        transform: translateX(100%);
+        transition: transform 500ms ease-in-out;
+    }
+
+    .primary-navigation[data-visible='true'] {
+        transform: translateX(0);
+    }
+
+    .mobile-nav-toggle {
+        /* removes from the DOM */
+        display: block;
+        position: absolute;
+        z-index: 2000;
+        right: 1rem;
+        top: 2rem;
+        background: transparent;
+        border: 0;
+        background-image: url(./assets/shared/icon-hamburger.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 1.5rem;
+        aspect-ratio: 1;        
+    }
+
+    .mobile-nav-toggle[aria-expanded='true'] {
+        background-image: url(./assets/shared/icon-close.svg);
+    }
+
+    .mobile-nav-toggle:focus-visible {
+        outline: 5px solid white;
+        outline-offset: 5px;
+    }
+}
+
+@media (min-width: 35em) {
+    .primary-navigation {
+        /* min, growth factor, max */
+        padding-inline: clamp(3rem, 5vw, 7rem);
+    }
+}
+
+/* sets up the nav padding for tablets 
+   use 44.999 to fix issue with different breakpoint styles*/
+@media (min-width: 35em) and (max-width: 44.999em) {
+    .primary-navigation a > span {
+        display: none;
+    }
+}
+
+@media (min-width: 45em) {
+
+    /* styles for the horizontal line in the header */
+    .primary-header::after {
+        content: '';
+        display: block;
+        position: relative;
+        height: 1px;
+        background: hsl( var(--clr-white));
+        /* overlap for the horizontal line */
+        margin-right: -2.5rem;
+        width: 100%;
+        /* flex prop for adding the line in the header */
+        order: 1;
+    }
+
+    nav {
+        /* flex prop for adding the line in the header */
+        order: 2;
+    }
+    
+    .primary-navigation {
+        margin-block: 2rem;
+    }
 }
 
 /* select every descendant of this class */
@@ -346,6 +484,7 @@ select {
     color: hsl( var(--clr-white) / 1);
     border-color: hsl( var(--clr-white) / 1);
 }
+
 
 .tab-list {
     --gap: 2.5rem;

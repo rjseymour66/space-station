@@ -17,29 +17,35 @@
     <!-- Style sheet-->
     <link rel="stylesheet" href="index.css">
     <title>Space Tourism Website</title>
+    <script src="index.js" defer></script>
 </head>
 
 <body class="home">
-
+    <a class="skip-to-content" href="#main">Skip to content</a>
     <header class="primary-header flex">
+        <!-- My ::before is here -->
         <div class="">
             <img src="./assets/shared/logo.svg" alt="space tourism logo" class="logo">
         </div>
-        <!-- <nav>
-            <ul class="primary-navigation underline-indicators flex">
+        <button class="mobile-nav-toggle" aria-controls="primary-navigation"><span class="sr-only"
+                aria-expanded="false">Menu</span></button>
+        <nav>
+            <ul id="primary-navigation" data-visible="false" class="primary-navigation underline-indicators flex">
                 <li class="active"><a class="ff-sans-cond uppercase text-white letter-spacing-2"
-                        href="index.html"><span>00</span>Home</a></li>
+                        href="index.html"><span aria-hidden=true>00</span>Home</a></li>
                 <li><a class="ff-sans-cond uppercase text-white letter-spacing-2"
-                        href="#"><span>01</span>Destination</a></li>
-                <li><a class="ff-sans-cond uppercase text-white letter-spacing-2" href="#"><span>02</span>Crew</a></li>
-                <li><a class="ff-sans-cond uppercase text-white letter-spacing-2" href="#"><span>02</span>Technology</a>
+                        href="#"><span aria-hidden=true>01</span>Destination</a></li>
+                <li><a class="ff-sans-cond uppercase text-white letter-spacing-2" href="#"><span aria-hidden=true>02</span>Crew</a></li>
+                <li><a class="ff-sans-cond uppercase text-white letter-spacing-2" href="#"><span aria-hidden=true>03</span>Technology</a>
                 </li>
             </ul>
-        </nav> -->
+        </nav>
+        <!-- My ::after is here -->
     </header>
 
 
-    <div class="grid-container grid-container--home">
+    <!-- main acts as a landmark for assistive technologies -->
+    <main id="main" class="grid-container grid-container--home">
         <div>
             <h1 class="text-accent fs-500 ff-sans-cond uppercase letter-spacing-1">So, you want to travel to
                 <span class="d-block fs-900 ff-serif text-white">Space</span>
@@ -53,7 +59,7 @@
         <div>
             <a href="#" class="large-button text-dark bg-white uppercase ff-serif">Explore</a>
         </div>
-    </div>
+    </main>
 
 </body>
 
