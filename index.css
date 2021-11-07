@@ -16,7 +16,7 @@
     --fs-800: 3.5rem;
     --fs-700: 1.5rem;
     --fs-600: 1rem;
-    --fs-500: 1.75rem;
+    --fs-500: 1rem;
     --fs-400: 0.9375rem;
     --fs-300: 1rem;
     --fs-200: 0.875rem;
@@ -32,6 +32,7 @@
         --fs-800: 5rem;
         --fs-700: 2.5rem;
         --fs-600: 1.5rem;
+        --fs-500: 1.25rem;
         --fs-400: 1rem;
     }
 }
@@ -159,6 +160,10 @@ select {
     margin-top: var(--flow-space, 1rem);
 }
 
+.flow--space-small {
+    --flow-space: .5rem;
+}
+
 .container {
     padding: 0 2em;
     margin: 0 auto;
@@ -166,44 +171,6 @@ select {
     /* margin-inline: auto; */
     /* padding-inline: 2em (l/r not t/b) */
 }
-
-.grid-container {
-    text-align: center;
-    display: grid;
-    place-items: center;
-    padding: 0 1rem;
-}
-
-.grid-container * {
-    max-width: 50ch;
-}
-
-@media (min-width: 45em) {
-    .grid-container {
-        text-align: left;
-        column-gap: var(--container-gap, 2rem);
-        /* 2rem -> as much space as you need | 0-40rem | 0-40rem | 2rem -> as much space as you need */
-        grid-template-columns: minmax(2rem, 1fr) repeat(2, minmax(0, 40rem)) minmax(2rem, 1fr);
-    }
-
-    /* browser creates grid cols even though they are not currently defined */
-    .grid-container > *:first-child {
-        grid-column: 2;
-    }
-
-    .grid-container > *:last-child {
-        grid-column: 3;
-    }
-
-    .grid-container--home {
-        /* places the items on the bottom. max picks the greater of the two vals.
-           After the padding-bottom is equal to one of these sizes, it stops sticking 
-           the item to the bottom and allows the space to grow */
-        padding-bottom: max(6rem, 20vh);
-        align-items: end;
-    }
-}
-
 
 /* screen reader only. Still in DOM, just hidden */
 .sr-only {
@@ -468,9 +435,10 @@ select {
 /* select every descendant of this class */
 .underline-indicators > * {
     cursor: pointer;
-    padding: var(--underline-gap, 1rem) 0;
+    padding: var(--underline-gap, .5rem) 0;
     border: 0;
     border-bottom: .2rem solid hsl( var( --clr-white) / 0);
+    background-color: transparent;
 }
 
 .underline-indicators > *:hover,
@@ -551,3 +519,224 @@ body {
         background-image: url(./assets/home/background-home-desktop.jpg);
     }
 }
+
+/* destination */
+
+.destination {
+    background-image: url(/assets/destination/background-destination-mobile.jpg);
+}
+
+@media (min-width: 35em) {
+    .destination {
+        background-position: center center;
+        background-image: url(/assets/destination/background-destination-tablet.jpg);
+    }
+}
+
+@media (min-width: 45em) {
+    .destination {
+        background-image: url(/assets/destination/background-destination-desktop.jpg);
+    }
+}
+
+/* crew */
+
+.crew {
+    background-image: url(/assets/crew/background-crew-mobile.jpg);
+}
+
+@media (min-width: 35em) {
+    .crew {
+        background-position: center center;
+        background-image: url(/assets/crew/background-crew-tablet.jpg);
+    }
+}
+
+@media (min-width: 45em) {
+    .crew {
+        background-image: url(/assets/crew/background-crew-desktop.jpg);
+    }
+}
+
+
+/* --------------------------- *\
+/* Layout                      *\
+/* --------------------------- */
+
+
+
+.grid-container {
+    text-align: center;
+    display: grid;
+    place-items: center;
+    padding-inline: 1rem;
+    padding-bottom: 4rem;
+}
+
+/* every el in the grid container is 50 ch wide */
+/* any paragraph that does not have a class applied to it */
+.grid-container p:not([class]) {
+    max-width: 50ch;
+}
+
+/* this only works if its in the grid container. If concerned, you 
+   can use .grid-container .numbered-title */
+.numbered-title {
+    grid-area: title;
+}
+
+/* destination layout */
+
+.grid-container--destination {
+    --flow-space: 2rem;
+    grid-template-areas: 
+        'title'
+        'image'
+        'tabs'
+        'content';
+}
+
+.grid-container--destination > picture {
+    grid-area: image;
+    max-width: 60%;
+}
+
+.grid-container--destination > .tab-list {
+    grid-area: tabs;
+}
+
+.grid-container--destination > .destination-info {
+    grid-area: content;
+}
+
+.destination-meta {
+    flex-direction: column;
+    border-top: 1px solid hsl( var(--clr-white) / .1);
+    padding-top: 2.5rem;
+    margin-top: 2.5rem;
+}
+
+.destination-meta p {
+    font-size: 1.75rem;
+}
+
+/* crew layout */
+
+.grid-container--crew {
+    --flow-space: 2rem;
+    grid-template-areas: 
+        'title'
+        'image'
+        'tabs'
+        'content';
+}
+
+.grid-container--crew > picture {
+    grid-area: image;
+    max-width: 60%;
+    border-bottom: 1px solid hsl( var(--clr-white) / .1);
+}
+
+.grid-container--crew > .dot-indicators {
+    grid-area: tabs;
+}
+
+.grid-container--crew > .crew-details {
+    grid-area: content;
+}
+
+.crew-details h2 {
+    color: hsl(var( --clr-white) /.5);
+}
+
+@media (min-width: 35em) {
+    .numbered-title {
+        /* this is a grid element property */
+        justify-self: start;
+        margin-top: 2rem;
+    }
+
+    .destination-meta {
+        flex-direction: row;
+        justify-content: space-evenly;
+    }
+
+    .grid-container--crew {
+        padding-bottom: 0;
+        grid-template-areas: 
+            'title'
+            'content'
+            'tabs'
+            'image';
+    }
+}
+
+@media (min-width: 45em) {
+    .grid-container {
+        text-align: left;
+        column-gap: var(--container-gap, 2rem);
+        /* 2rem -> as much space as you need | 0-40rem | 0-40rem | 2rem -> as much space as you need */
+        grid-template-columns: minmax(2rem, 1fr) repeat(2, minmax(0, 40rem)) minmax(2rem, 1fr);
+    }
+
+    .grid-container--home {
+        /* places the items on the bottom. max picks the greater of the two vals.
+           After the padding-bottom is equal to one of these sizes, it stops sticking 
+           the item to the bottom and allows the space to grow */
+        padding-bottom: max(6rem, 20vh);
+        align-items: end;
+    }
+    /* browser creates grid cols even though they are not currently defined */
+    .grid-container--home > *:first-child {
+        grid-column: 2;
+    }
+
+    .grid-container--home > *:last-child {
+        grid-column: 3;
+    }
+
+    .grid-container--destination {
+        /* works on all grid items, unlike justify-self */
+        justify-items: start;
+        /* this keeps all the content together at the top instead of stretching as 
+           the screen size increases */
+        align-content: start;
+        grid-template-areas:
+         /* '.' is an empty area  */
+            '. title title .'
+            '. image tabs .'
+            '. image content .';
+    }
+
+    .grid-container--destination > picture,
+    .grid-container--crew > picture {
+        max-width: 90%;
+    }
+
+    .destination-meta {
+        /* select whichever of these is smaller. vw is smaller on smaller 
+           screens (so it is applied), vw is really big on big screen. */
+        --gap: min(6vw, 6rem);
+        /* flexbox property */
+        justify-content: start;
+    }
+
+    .grid-container--crew {
+        grid-template-areas: 
+            '. title   title .'
+            '. content image .'
+            '. tabs    image . ';
+    }
+
+    .grid-container--crew > .crew-details,
+    .grid-container--crew > .dot-indicators {
+        /* flexbox property */
+        justify-self: start;
+    }
+
+    .grid-container--crew > picture {
+        /* flexbox property */
+        align-self: end;
+    }
+}
+
