@@ -599,6 +599,8 @@ body {
 .grid-container--destination > picture {
     grid-area: image;
     max-width: 60%;
+    /* keeps the image from bouncing around based on the text */
+    align-self: start;
 }
 
 .grid-container--destination > .tab-list {
@@ -708,8 +710,7 @@ body {
             '. image content .';
     }
 
-    .grid-container--destination > picture,
-    .grid-container--crew > picture {
+    .grid-container--destination > picture {
         max-width: 90%;
     }
 
@@ -722,21 +723,29 @@ body {
     }
 
     .grid-container--crew {
+        /* 2rem -> as much space as you need | 0-40rem | 0-40rem | 2rem -> as much space as you need */
+        grid-template-columns: minmax(2rem, 1fr) minmax(0, 35rem) minmax(0, 25rem) minmax(2rem, 1fr);
+        /* works on all grid items, unlike justify-self */
+        justify-items: start;
+        /* this keeps all the content together at the top instead of stretching as 
+           the screen size increases */
+        /* align-content: start; */
         grid-template-areas: 
             '. title   title .'
             '. content image .'
             '. tabs    image . ';
     }
 
-    .grid-container--crew > .crew-details,
-    .grid-container--crew > .dot-indicators {
+    .grid-container--crew > .crew-details {
         /* flexbox property */
         justify-self: start;
     }
 
     .grid-container--crew > picture {
+        /* take the span 2 off if I ever figure out why the hidden isn't working */
+        /* grid-column: span 2; */
         /* flexbox property */
         align-self: end;
+        max-width: 100%;
     }
 }
-
